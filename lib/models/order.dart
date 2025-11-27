@@ -2,22 +2,18 @@ import 'product.dart';
 
 class Order {
   final String tableName;
-  final List<Product> products; 
-  final DateTime date;           
-
+  final List<Product> products;
+  
   Order({
     required this.tableName,
     required this.products,
-    DateTime? date,
-  }) : date = date ?? DateTime.now();
+  });
 
   double get totalOrderPrice {
-    double sum = 0;
-    for (var product in products) {
-      sum += product.price;
-    }
-    return sum;
+    return products.fold(0, (sum, item) => sum + (item.price * item.quantity));
   }
 
-  int get totalProductCount => products.length;
+  int get totalProductCount {
+    return products.fold(0, (sum, item) => sum + item.quantity);
+  }
 }

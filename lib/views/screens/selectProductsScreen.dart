@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../models/product.dart';
 import '../../data/cocktails.dart';
+import '../../models/product.dart';
 
 class SelectProductsScreen extends StatefulWidget {
   const SelectProductsScreen({super.key});
@@ -10,54 +10,114 @@ class SelectProductsScreen extends StatefulWidget {
 }
 
 class _SelectProductsScreenState extends State<SelectProductsScreen> {
-  final List<Product> _selectedProducts = [];
+  late List<Product> carta;
 
-  void _toggleProduct(Product product, bool isSelected) {
-    setState(() {
-      if (isSelected) {
-        _selectedProducts.add(product);
-      } else {
-        _selectedProducts.remove(product);
-      }
-    });
+  @override
+  void initState() {
+    super.initState();
+    carta = MockData.getCarta()
+        .map((p) => Product(name: p.name, price: p.price, quantity: 0))
+        .toList();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue[50],
       appBar: AppBar(
-        title: const Text("Seleccionar cocktails"),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context, _selectedProducts);
-            },
-            child: const Text(
-              "CONFIRMAR", 
-              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.bold),
+        title: const Text("Elegir Productos"),
+        backgroundColor: Colors.blue[700],
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: ListView.builder(
+              itemCount: carta.length,
+              itemBuilder: (context, index) {
+                final product = carta[index];
+                return Card(
+                  color: Colors.blue[100],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  child: ListTile(
+                    title: Text(product.name),
+                    subtitle: Text("${product.price} €"),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.remove, color: Colors.blueGrey),
+                          onPressed: () {
+                            if (product.quantity > 0) {
+                              setState(() => product.quantity--);
+                            }
+                          },
+                        ),
+                        Text(
+                          "${product.quantity}",
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.add, color: Colors.blueGrey),
+                          onPressed: () {
+                            setState(() => product.quantity++);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text(
+                      "Cancelar",
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue[700],
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      minimumSize: const Size(double.infinity, 50),
+                    ),
+                    onPressed: () {
+                      final selected =
+                          carta.where((p) => p.quantity > 0).toList();
+                      Navigator.pop(context, selected);
+                    },
+                    child: const Text(
+                      "Confirmar",
+                      style: TextStyle(fontSize: 18, color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
             ),
           )
         ],
-      ),
-
-      body: ListView.builder(
-        itemCount: MockData.cocktails.length,
-        itemBuilder: (context, index) {
-          final product = MockData.cocktails[index];
-          final isChecked = _selectedProducts.contains(product);
-
-          return CheckboxListTile(
-            title: Text(product.name),
-            subtitle: Text("${product.price} €"),
-            value: isChecked,
-            activeColor: Colors.blueAccent,
-            onChanged: (bool? value) {
-              if (value != null) {
-                _toggleProduct(product, value);
-              }
-            },
-          );
-        },
       ),
     );
   }

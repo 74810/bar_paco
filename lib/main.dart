@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
 import 'views/screens/homeScreen.dart';
-import 'views/screens/orderResumeScreen.dart'; 
+import 'views/screens/orderResumeScreen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const BarApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class BarApp extends StatelessWidget {
+  const BarApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Bar Manager',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      
+      title: 'Gestión de Bar',
+      theme: ThemeData(
+        primarySwatch: Colors.indigo,
+        useMaterial3: true,
+      ),
       home: const HomeScreen(),
-
       routes: {
         '/resumen': (context) => const OrderResumeScreen(),
       },

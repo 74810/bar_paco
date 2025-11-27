@@ -12,120 +12,196 @@ class CreateOrderScreen extends StatefulWidget {
 
 class _CreateOrderScreenState extends State<CreateOrderScreen> {
   final CreateOrderViewModel vm = CreateOrderViewModel();
-  final TextEditingController _tableNameController = TextEditingController();
+  final TextEditingController _tableController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _tableController.addListener(() {
+      vm.setTableName(_tableController.text);
+    });
+  }
 
   @override
   void dispose() {
-    _tableNameController.dispose();
+    _tableController.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Nuevo Pedido")),
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: _tableNameController,
-              decoration: const InputDecoration(
-                labelText: "Nombre de la Mesa",
-                border: OutlineInputBorder(),
-                prefixIcon: Icon(Icons.table_restaurant),
+    return AnimatedBuilder(
+      animation: vm,
+      builder: (context, child) {
+        return Scaffold(
+          backgroundColor: Colors.blue[50],
+          appBar: AppBar(
+            title: const Text("Crear Pedido"),
+            backgroundColor: Colors.blue[700],
+            actions: [
+              TextButton.icon(
+                onPressed: () => _navigateSelectProducts(context),
+                icon: const Icon(Icons.add, color: Colors.white),
+                label: const Text(
+                  "Añadir Productos",
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
-              onChanged: (text) {
-                vm.setTableName(text);
-              },
-            ),
+            ],
           ),
-          Expanded(
-            child: vm.tempProducts.isEmpty
-                ? const Center(child: Text("Lista vacía. Añade productos."))
-                : ListView.builder(
-                    itemCount: vm.tempProducts.length,
-                    itemBuilder: (ctx, i) {
-                      final product = vm.tempProducts[i];
-                      return ListTile(
-                        title: Text(product.name),
-                        trailing: Text("${product.price} €"),
-                        leading: IconButton(
-                          icon: const Icon(Icons.remove_circle, color: Colors.red),
-                          onPressed: () {
-                            setState(() {
-                              vm.removeProduct(i);
-                            });
-                          },
-                        ),
-                      );
-                    },
-                  ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                Text(
-                  "Total: ${vm.totalTempPrice.toStringAsFixed(2)} €",
-                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.add),
-                    label: const Text("AÑADIR PRODUCTOS"),
-                    onPressed: () async {
-                      final result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SelectProductsScreen(),
-                        ),
-                      );
-
-                      if (result != null && result is List<Product>) {
-                        setState(() {
-                          vm.addProducts(result);
-                        });
-                      }
-                    },
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextField(
+                  controller: _tableController,
+                  decoration: const InputDecoration(
+                    labelText: "Nombre de Mesa",
+                    border: OutlineInputBorder(),
                   ),
                 ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: OutlinedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-                        onPressed: () => Navigator.pop(context),
-                        child: const Text("CANCELAR", style: TextStyle(color: Colors.white)),
-                      ),
-                    ),
-                    const SizedBox(width: 15),
-                    Expanded(
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                        onPressed: () {
-                          if (!vm.isValid) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text("Falta mesa o productos")),
-                            );
-                            return;
-                          }
-                          final newOrder = vm.createOrder();
-                          Navigator.pop(context, newOrder);
+              ),
+              Expanded(
+                child: vm.selectedProducts.isEmpty
+                    ? const Center(
+                        child: Text(
+                          "Sin productos seleccionados",
+                          style: TextStyle(color: Colors.blueGrey),
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: vm.selectedProducts.length,
+                        itemBuilder: (ctx, i) {
+                          final p = vm.selectedProducts[i];
+                          return ListTile(
+                            title: Text(p.name),
+                            subtitle: Text("${p.quantity} x ${p.price} €"),
+                            trailing: Text(
+                                "${(p.price * p.quantity).toStringAsFixed(2)} €"),
+                          );
                         },
-                        child: const Text("GUARDAR", style: TextStyle(color: Colors.white)),
                       ),
+              ),
+              Container(
+                padding: const EdgeInsets.all(16),
+                color: Colors.blue[100],
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text("TOTAL ACUMULADO:",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text("${vm.totalTempPrice.toStringAsFixed(2)} €",
+                        style: const TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold)),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue[300], // azul claro
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              minimumSize: const Size(double.infinity, 50),
+                            ),
+                            onPressed: vm.isValid
+                                ? () => _navigateSummary(context)
+                                : null,
+                            child: const Text(
+                              "Ver Resumen",
+                              style: TextStyle(
+                                  fontSize: 18, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red, // botón rojo
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              minimumSize: const Size(double.infinity, 50),
+                            ),
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text(
+                              "Cancelar",
+                              style: TextStyle(
+                                  fontSize: 18, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.blue[700],
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              minimumSize: const Size(double.infinity, 50),
+                            ),
+                            onPressed: () {
+                              if (vm.isValid) {
+                                Navigator.pop(context, vm.createOrder());
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          "Falta mesa o productos")),
+                                );
+                              }
+                            },
+                            child: const Text(
+                              "Guardar Pedido",
+                              style: TextStyle(
+                                  fontSize: 18, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
-                )
-              ],
-            ),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
+        );
+      },
+    );
+  }
+
+  Future<void> _navigateSelectProducts(BuildContext context) async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SelectProductsScreen()),
+    );
+
+    if (!mounted) return;
+
+    if (result != null && result is List<Product>) {
+      vm.updateProducts(result);
+    }
+  }
+
+  void _navigateSummary(BuildContext context) {
+    final tempOrder = vm.createOrder();
+    Navigator.pushNamed(
+      context,
+      '/resumen',
+      arguments: tempOrder,
     );
   }
 }
