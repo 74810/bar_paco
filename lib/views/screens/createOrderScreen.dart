@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../models/product.dart';
 import '../../viewModels/createOrderVM.dart';
+import '../../models/product.dart';
 import 'selectProductsScreen.dart';
 
 class CreateOrderScreen extends StatefulWidget {
@@ -12,7 +12,6 @@ class CreateOrderScreen extends StatefulWidget {
 
 class _CreateOrderScreenState extends State<CreateOrderScreen> {
   final CreateOrderViewModel vm = CreateOrderViewModel();
-  
   final TextEditingController _tableNameController = TextEditingController();
 
   @override
@@ -41,7 +40,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
               },
             ),
           ),
-
           Expanded(
             child: vm.tempProducts.isEmpty
                 ? const Center(child: Text("Lista vacía. Añade productos."))
@@ -53,7 +51,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                         title: Text(product.name),
                         trailing: Text("${product.price} €"),
                         leading: IconButton(
-                          icon: const Icon(Icons.remove_circle_outline, color: Colors.red),
+                          icon: const Icon(Icons.remove_circle, color: Colors.red),
                           onPressed: () {
                             setState(() {
                               vm.removeProduct(i);
@@ -64,9 +62,9 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                     },
                   ),
           ),
-
           Container(
             padding: const EdgeInsets.all(20),
+            color: Colors.grey[100],
             child: Column(
               children: [
                 Text(
@@ -74,8 +72,8 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                   style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 10),
-
                 SizedBox(
+                  width: double.infinity,
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.add),
                     label: const Text("AÑADIR PRODUCTOS"),
@@ -96,14 +94,12 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                   ),
                 ),
                 const SizedBox(height: 10),
-
                 Row(
                   children: [
                     Expanded(
                       child: OutlinedButton(
-                        style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                         onPressed: () => Navigator.pop(context),
-                        child: const Text("CANCELAR", style: TextStyle(color: Colors.white)),
+                        child: const Text("CANCELAR"),
                       ),
                     ),
                     const SizedBox(width: 15),
@@ -117,7 +113,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                             );
                             return;
                           }
-
                           final newOrder = vm.createOrder();
                           Navigator.pop(context, newOrder);
                         },

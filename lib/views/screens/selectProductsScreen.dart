@@ -44,7 +44,6 @@ class _SelectProductsScreenState extends State<SelectProductsScreen> {
         itemCount: MockData.cocktails.length,
         itemBuilder: (context, index) {
           final product = MockData.cocktails[index];
-          
           final isChecked = _selectedProducts.contains(product);
 
           return CheckboxListTile(
