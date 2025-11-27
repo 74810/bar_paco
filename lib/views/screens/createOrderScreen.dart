@@ -64,7 +64,6 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
           ),
           Container(
             padding: const EdgeInsets.all(20),
-            color: Colors.grey[100],
             child: Column(
               children: [
                 Text(
@@ -98,8 +97,9 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                   children: [
                     Expanded(
                       child: OutlinedButton(
+                        style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
                         onPressed: () => Navigator.pop(context),
-                        child: const Text("CANCELAR"),
+                        child: const Text("CANCELAR", style: TextStyle(color: Colors.white)),
                       ),
                     ),
                     const SizedBox(width: 15),
