@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../data/cocktails.dart';
+import '../../data/productos.dart';
 import '../../models/product.dart';
 
 class SelectProductsScreen extends StatefulWidget {
