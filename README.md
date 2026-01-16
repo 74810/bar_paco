@@ -1,16 +1,15 @@
-# bar_paco
+# Gestión de Bar - Bar Paco
 
-A new Flutter project.
+## Descripción
+Aplicación móvil desarrollada en Flutter para la gestión de pedidos en "Bar Paco". Esta herramienta permite a los camareros gestionar mesas, añadir productos a un pedido y calcular el total.
 
-## Getting Started
+## Tecnologías Usadas
+* Flutter y Dart: Framework principal y lenguaje de programación.
+* Material Design 3: Para la interfaz de usuario.
 
-This project is a starting point for a Flutter application.
+## Características Principales
+* Selección de Productos: Interfaz para añadir productos a un pedido.
+* Gestión de Pedidos: Creación y listado de pedidos activos.
+* Cálculo Automático: Cálculo del total y cantidad de productos en tiempo real.
+* Resumen de Orden: Vista detallada antes de confirmar el pedido.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
