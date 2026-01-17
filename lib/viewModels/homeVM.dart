@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import '../models/order.dart';
 import '../models/product.dart';
 
+/// ViewModel principal que gestiona la lista global de pedidos activos en el bar.
 class HomeViewModel extends ChangeNotifier {
+  /// Lista de pedidos activos.
   List<Order> orders = [];
 
   HomeViewModel() {
     _loadInitialData();
   }
 
+  /// Carga datos iniciales de prueba para que la app no empiece vacía.
   void _loadInitialData() {
     orders.addAll([
       Order(
@@ -55,7 +58,7 @@ class HomeViewModel extends ChangeNotifier {
 
     notifyListeners();
   }
-
+  /// Añade un nuevo pedido a la lista y actualiza la pantalla principal.
   void addOrder(Order order) {
     orders.add(order);
     notifyListeners();

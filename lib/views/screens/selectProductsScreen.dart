@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../data/productos.dart';
 import '../../models/product.dart';
 
+/// Pantalla que muestra la carta completa de productos y permite seleccionar cantidades.
 class SelectProductsScreen extends StatefulWidget {
   const SelectProductsScreen({super.key});
 

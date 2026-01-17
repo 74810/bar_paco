@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../models/order.dart';
 
+/// Widget personalizado que representa una tarjeta de resumen de un pedido en una lista.
+/// Muestra la mesa, cantidad de productos y precio total.
 class OrderTile extends StatelessWidget {
   final Order order;
 

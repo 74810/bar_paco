@@ -1,5 +1,7 @@
 import '../models/product.dart';
 
+/// Clase proveedora de datos simulados.
+/// Se utiliza para poblar la lista de productos disponibles sin necesidad de un backend real.
 class MockData {
   static List<Product> getCarta() {
     return [

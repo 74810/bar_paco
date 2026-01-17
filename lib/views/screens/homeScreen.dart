@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../../viewModels/homeVM.dart';
 import '../../models/order.dart';
 import 'createOrderScreen.dart';
-
+/// Pantalla principal Home de la aplicación.
+/// Muestra el listado de todos los pedidos activos.
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -95,7 +96,8 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-
+  /// Navega a la pantalla de creación de pedidos y espera el resultado.
+  /// Si se recibe un nuevo pedido, lo añade al ViewModel.
   Future<void> _navigateToCreateOrder(BuildContext context) async {
     final result = await Navigator.push(
       context,

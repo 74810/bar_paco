@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../../models/order.dart';
 
+/// Pantalla de resumen de un pedido.
+/// Muestra el detalle de la mesa, la lista de productos y el total final.
+/// Se utiliza tanto para previsualizar antes de crear como para ver detalles de pedidos ya creados.
 class OrderResumeScreen extends StatelessWidget {
   const OrderResumeScreen({super.key});
 

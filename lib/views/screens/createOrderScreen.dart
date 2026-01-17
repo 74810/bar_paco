@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import '../../viewModels/createOrderVM.dart';
 import '../../models/product.dart';
 import 'selectProductsScreen.dart';
-
+/// Pantalla para crear un nuevo pedido.
+/// Permite introducir el nombre de la mesa y seleccionar productos.
 class CreateOrderScreen extends StatefulWidget {
   const CreateOrderScreen({super.key});
 
@@ -39,7 +40,9 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
             title: const Text("Crear Pedido"),
             backgroundColor: Colors.blue[700],
             actions: [
-              TextButton.icon(
+            Tooltip(
+              message: "Ir a la pantalla de selección de productos",
+              child: TextButton.icon(
                 onPressed: () => _navigateSelectProducts(context),
                 icon: const Icon(Icons.add, color: Colors.white),
                 label: const Text(
@@ -159,15 +162,18 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                      content: Text(
-                                          "Falta mesa o productos")),
+                                    content: Text("Error: Debes indicar el nombre de la mesa y seleccionar al menos un producto."),
+                                    backgroundColor: Colors.redAccent,
+                                    duration: Duration(seconds: 3),
+                                  ),
                                 );
                               }
                             },
-                            child: const Text(
-                              "Guardar Pedido",
-                              style: TextStyle(
-                                  fontSize: 18, color: Colors.white),
+                            child: const Tooltip(
+                              message: "Finalizar y guardar el pedido actual",
+                              child: Text(
+                                "Guardar Pedido",
+                                style: TextStyle(fontSize: 18, color: Colors.white),
                             ),
                           ),
                         ),
@@ -182,7 +188,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
       },
     );
   }
-
+  /// Abre la pantalla de selección de productos y espera la lista de retorno.
   Future<void> _navigateSelectProducts(BuildContext context) async {
     final result = await Navigator.push(
       context,
@@ -195,7 +201,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
       vm.updateProducts(result);
     }
   }
-
+  /// Navega a la pantalla de resumen pasando el pedido temporal como argumento.
   void _navigateSummary(BuildContext context) {
     final tempOrder = vm.createOrder();
     Navigator.pushNamed(
