@@ -50,6 +50,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
+            ),
             ],
           ),
           body: Column(
@@ -108,7 +109,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                         Expanded(
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blue[300], // azul claro
+                              backgroundColor: Colors.blue[300],
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
@@ -132,7 +133,7 @@ class _CreateOrderScreenState extends State<CreateOrderScreen> {
                         Expanded(
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red, // botón rojo
+                              backgroundColor: Colors.red,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8),
                               ),
